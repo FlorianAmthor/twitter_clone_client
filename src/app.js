@@ -1,38 +1,28 @@
 import {inject} from 'aurelia-framework';
+import {EventAggregator} from 'aurelia-event-aggregator';
 import TweetService from './services/tweet-service';
+import {LoginStatus} from './services/messages';
 
-@inject(TweetService)
+@inject(EventAggregator, TweetService)
 
 export class App {
 
-  email = "florian@amthor.com";
-  password = "secret";
-
   loggedIn = false;
+  showSignup = false;
 
-  constructor(ts){
+  constructor(ea, ts) {
     this.tweetService = ts;
+    ea.subscribe(LoginStatus, msg => {
+      this.loggedIn = msg.status.success;
+    });
   }
 
-  login(e) {
-    console.log(`Trying to log in ${this.email}`);
-    const status = this.tweetService.login(this.email, this.password);
-    this.prompt = status.message;
-    this.loggedIn = status.success;
+  signup() {
+    this.showSignup = !this.showSignup;
   }
 
-
-  logout(){
-    console.log(`Logging out ${this.email}`);
+  logout() {
+    console.log('Logging out`');
     this.loggedIn = false;
-  }
-
-  register(e) {
-    this.tweetService.register(this.firstName, this.lastName, this.registerEmail, this.registerPassword);
-    this.firstName = null;
-    this.lastName = null;
-    this.registerEmail = null;
-    this.registerPassword = null;
-
   }
 }
