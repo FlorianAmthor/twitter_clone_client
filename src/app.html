@@ -1,13 +1,13 @@
 <template>
-  <compose show.bind="!loggedIn" view="./viewmodels/welcomeMenu.html"></compose>
-  <compose show.bind="loggedIn" view="./viewmodels/mainMenu.html"></compose>
+  <compose show.bind="!loggedIn" view="./viewmodels/menus/welcomeMenu.html"></compose>
+  <compose show.bind="loggedIn" view="./viewmodels/menus/mainMenu.html"></compose>
   <section show.bind="loggedIn" class="ui raised segment" style="height: 95%">
     <div class="ui three column grid">
       <div class="column">
-        <compose view-model="./viewmodels/createTweet"></compose>
+        <compose view-model="./viewmodels/createTweet/createTweet"></compose>
       </div>
       <div class="column" style="height: 100%; overflow: auto">
-        <compose view-model="./viewmodels/tweetList"></compose>
+        <compose view-model="./viewmodels/tweetList/tweetList"></compose>
       </div>
       <div class="column">
         <!--<div class="ui middle aligned selection list">
@@ -35,4 +35,5 @@
 
     <div class="ui  divider"></div>
   </section>
+  <compose show.bind="!loggedIn" view="./viewmodels/register.html"></compose>
 </template>
