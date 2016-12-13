@@ -1,3 +1,10 @@
 <template>
-  <h1>${message}</h1>
+  <section class="ui two column stackable grid basic center aligned segment">
+    <aside class="column">
+      <compose view-model="./viewmodels/createTweet"></compose>
+    </aside>
+    <article class="column">
+      <compose view-model="./viewmodels/tweetList"></compose>
+    </article>
+  </section>
 </template>

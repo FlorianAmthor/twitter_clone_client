@@ -1,0 +1,19 @@
+<template>
+  <form submit.trigger="createTweet()">
+    <div class="grouped inline fields">
+      <h3> New tweet</h3>
+      <div class="ui form">
+        <div class="field">
+          <textarea name="content" placeholder="Content..." maxlength="150" value.bind="content"></textarea>
+        </div>
+      </div>
+    </div>
+    <div>
+      <!-- <label for="file" class="ui icon button">
+         <i class="file icon"></i>
+         Add Image</label>
+       <input name="tweetImage" type="file" id="file" style="display:none">-->
+    </div>
+    <button class="ui blue submit button">Tweet</button>
+  </form>
+</template>

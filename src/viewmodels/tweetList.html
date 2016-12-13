@@ -1,0 +1,27 @@
+<template>
+  <div class="cards">
+    <div  class="ui card" repeat.for="tweet of tweets">
+      <div class="image" style="overflow: hidden; max-height: 200px; max-width: 300px;">
+        <img class="ui medium image" src="">
+      </div>
+      <div class="content">
+        <img class="ui avatar image" src="">${tweet.author.firstName} ${tweet.author.lastName}
+        <div class="right floated meta">
+          <form> <!--action="/login" method="POST"-->
+            <button class="ui icon button" style="background: white;">
+              <i class="delete icon" style="background: white;"></i>
+            </button>
+          </form>
+        </div>
+        <div class="bottom floated meta">${tweet.date}</div>
+      </div>
+
+      <div class="description" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;">
+        ${tweet.content}
+      </div>
+      <div class="ui input">
+        <input type="text" placeholder="Add Comment...">
+      </div>
+    </div>
+  </div>
+</template>
