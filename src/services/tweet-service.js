@@ -2,44 +2,38 @@ import {inject} from 'aurelia-framework';
 import Fixtures from './fixtures';
 import {LoginStatus} from './messages';
 import {EventAggregator} from 'aurelia-event-aggregator';
+import AsyncHttpClient from './async-http-client';
 
-@inject(Fixtures, EventAggregator)
+@inject(Fixtures, EventAggregator, AsyncHttpClient)
 export default class TweetService {
 
   users = [];
   tweets = [];
   comments = [];
 
-  constructor(data, ea){
-    this.users = data.users;
-    this.tweets = data.tweets;
-    this.comments = data.comments;
+  constructor(data, ea, ac) {
     this.ea = ea;
+    this.ac = ac;
+    this.getUsers();
+  }
+
+  getUsers() {
+    this.ac.get('/api/users').then(res => {
+      this.users = res.content;
+    });
   }
 
   login(email, password) {
     const status = {
       success: false,
-      message: ''
+      message: 'Login Attempt Failed'
     };
-
-    console.log(this.users[email]);
-    let user = {};
-    for(let i = 0; i < this.users.length; i++){
-      if (this.users[i].email === email){
-        user = this.users[i];
-      }
-    }
-    if (user != null) {
-      if (user.password === password) {
+    for (let user of this.users) {
+      if (user.email === email && user.password === password) {
         status.success = true;
-      } else {
-        status.message = 'Incorrect password';
+        status.message = 'logged in';
       }
-    } else {
-      status.message = 'Unknown user';
     }
-
     this.ea.publish(new LoginStatus(status));
   }
 
@@ -56,20 +50,23 @@ export default class TweetService {
       firstName: firstName,
       lastName: lastName,
       email: email,
-      password: password,
-      isAdmin: false
+      password: password
     };
-    this.users.push(newUser);
+    this.ac.post('/api/users', newUser).then(res => {
+      this.getUsers();
+    });
   }
 
-  tweet(author, date, content, image) {
+  tweet(author, date, content) {
     let tweet = {
-      author: author,
+      author: this.users[1],
       date: date,
       content: content,
-      image: image
     };
 
-    this.tweets.push(tweet);
+    this.ac.post('/api/tweets', tweet).then(res => {
+      const returnedTweet = res.content;
+      this.tweets.push(returnedTweet);
+    });
   }
 }

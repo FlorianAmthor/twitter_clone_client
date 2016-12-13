@@ -7,7 +7,6 @@ export class Tweet {
   author;
   date;
   content;
-  image;
 
   constructor(ts) {
     this.tweetService = ts;
@@ -16,10 +15,9 @@ export class Tweet {
 
   createTweet() {
     this.date = Date.now();
-    this.tweetService.tweet(this.author, this.date, this.content, this.image);
+    this.tweetService.tweet(this.author, this.date, this.content);
     this.content = null;
     this.date = null;
-    this.image = null;
   }
 
 }
