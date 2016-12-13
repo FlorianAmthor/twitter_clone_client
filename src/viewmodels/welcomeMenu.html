@@ -1,0 +1,22 @@
+<template>
+  <nav class="ui blue inverted menu" style="height: 5%">
+    <header class="header item"><a href="/"> Twitter-Clone </a></header>
+    <div class="right item">
+      <div class="ui ten wide column fluid form">
+        <form submit.delegate="login($event)">
+          <div class="ui grid">
+              <div class="item">
+                <input placeholder="Email" type="text" name="email" value.bind="email">
+              </div>
+              <div class="item">
+                <input placeholder="Password" type="password" name="password" value.bind="password">
+              </div>
+            <div class="item">
+              <button class="ui blue submit button">Login</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </nav>
+</template>
