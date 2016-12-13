@@ -1,17 +1,20 @@
 import {inject} from 'aurelia-framework';
 import Fixtures from './fixtures';
+import {LoginStatus} from './messages';
+import {EventAggregator} from 'aurelia-event-aggregator';
 
-@inject(Fixtures)
+@inject(Fixtures, EventAggregator)
 export default class TweetService {
 
   users = [];
   tweets = [];
   comments = [];
 
-  constructor(data){
+  constructor(data, ea){
     this.users = data.users;
     this.tweets = data.tweets;
     this.comments = data.comments;
+    this.ea = ea;
   }
 
   login(email, password) {
@@ -37,7 +40,15 @@ export default class TweetService {
       status.message = 'Unknown user';
     }
 
-    return status;
+    this.ea.publish(new LoginStatus(status));
+  }
+
+  logout() {
+    const status = {
+      success: false,
+      message: ''
+    };
+    this.ea.publish(new LoginStatus(status));
   }
 
   register(firstName, lastName, email, password) {
