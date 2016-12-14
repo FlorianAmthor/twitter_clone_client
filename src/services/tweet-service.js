@@ -14,7 +14,6 @@ export default class TweetService {
   constructor(data, ea, ac) {
     this.ea = ea;
     this.ac = ac;
-    this.getUsers();
   }
 
   getUsers() {
@@ -23,18 +22,28 @@ export default class TweetService {
     });
   }
 
+  getTweets() {
+    this.ac.get('/api/tweets').then(res => {
+      this.tweets = res.content;
+    });
+  }
+
+  getComments() {
+    this.ac.get('/api/comments').then(res => {
+      this.comments = res.content;
+    });
+  }
+
   login(email, password) {
-    const status = {
-      success: false,
-      message: 'Login Attempt Failed'
+    const user = {
+      email: email,
+      password: password
     };
-    for (let user of this.users) {
-      if (user.email === email && user.password === password) {
-        status.success = true;
-        status.message = 'logged in';
-      }
-    }
-    this.ea.publish(new LoginStatus(status));
+    this.ac.authenticate('/api/users/authenticate', user);
+  }
+
+  isAuthenticated() {
+    return this.ac.isAuthenticated();
   }
 
   logout() {
@@ -42,7 +51,8 @@ export default class TweetService {
       success: false,
       message: ''
     };
-    this.ea.publish(new LoginStatus(status));
+    this.ac.clearAuthentication();
+    this.ea.publish(new LoginStatus(new LoginStatus(status)));
   }
 
   register(firstName, lastName, email, password) {

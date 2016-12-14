@@ -9,7 +9,6 @@ export class Login {
 
   constructor(ts) {
     this.tweetService = ts;
-    this.prompt = '';
   }
 
   login(e) {
