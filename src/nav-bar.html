@@ -1,6 +1,6 @@
 <template bindable="router">
   <nav class="ui blue inverted menu" style="height: 5%;">
-    <header class="header item"><a href="/"> Twitter-Clone </a></header>
+    <header class="header item">Twitter-Clone</header>
     <div class="right menu">
       <div repeat.for="row of router.navigation">
         <a class="${row.isActive ? 'active' : ''} item"  href.bind="row.href">${row.title}</a>

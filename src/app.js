@@ -12,7 +12,7 @@ export class App {
     ea.subscribe(LoginStatus, msg => {
       if (msg.status.success === true) {
         au.setRoot('home').then(() => {
-          this.router.navigateToRoute('home');
+          this.router.navigateToRoute('dashboard');
         });
       } else {
         au.setRoot('app').then(() => {
@@ -24,8 +24,8 @@ export class App {
 
   configureRouter(config, router) {
     config.map([
-      { route: ['', 'login'], name: 'login', moduleId: 'viewmodels/login/login', nav: true, title: 'Login' },
-      { route: 'signup', name: 'signup', moduleId: 'viewmodels/signup/signup', nav: true, title: 'Signup' }
+      { route: ['', 'login'], name: 'login', moduleId: './viewmodels/login/login', nav: true, title: 'Login' },
+      { route: 'signup', name: 'signup', moduleId: './viewmodels/signup/signup', nav: true, title: 'Signup' }
     ]);
 
     config.mapUnknownRoutes(instruction => {

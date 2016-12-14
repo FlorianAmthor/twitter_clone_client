@@ -52,7 +52,7 @@ export default class TweetService {
       message: ''
     };
     this.ac.clearAuthentication();
-    this.ea.publish(new LoginStatus(new LoginStatus(status)));
+    this.ea.publish(new LoginStatus(status));
   }
 
   register(firstName, lastName, email, password) {
@@ -62,9 +62,7 @@ export default class TweetService {
       email: email,
       password: password
     };
-    this.ac.post('/api/users', newUser).then(res => {
-      this.getUsers();
-    });
+    this.ac.post('/api/users', newUser);
   }
 
   tweet(author, date, content) {
