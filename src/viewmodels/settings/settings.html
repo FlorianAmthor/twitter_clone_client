@@ -1,0 +1,30 @@
+<template>
+  <section class="ui raised segment">
+    <div class="ui grid">
+      <div class="ui ten wide column">
+        <div class="ui stacked fluid form segment">
+          <form submit.trigger="createTweet()">
+            <h3 class="ui header">Settings</h3>
+            <div class="field">
+              <label>Email</label>
+              <input value.bind="email" type="text" name="email">
+            </div>
+            <div class="field">
+              <label>Password</label>
+              <input value.bind="password" type="password" name="password">
+            </div>
+            <!-- <div class="field">
+                <label for="file" class="ui icon button">
+                  <i class="file icon"></i>
+                  Change profile picture
+                </label>
+                <input name="profilePicture" type="file" id="file" style="display:none">
+              </div>
+              -->
+            <button class="ui blue submit button">Save</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</template>

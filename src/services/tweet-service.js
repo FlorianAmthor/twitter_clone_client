@@ -65,6 +65,15 @@ export default class TweetService {
     this.ac.post('/api/users', newUser);
   }
 
+  updateUser(email, password){
+    const newUser = {
+      email: email,
+      password: password
+    }
+
+    this.ac.post('api/users/update', newUser);
+  }
+
   tweet(author, date, content) {
     let tweet = {
       author: this.users[1],

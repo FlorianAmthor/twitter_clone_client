@@ -10,6 +10,7 @@ export class Home {
   configureRouter(config, router) {
     config.map([
       { route: ['','home'],  name: 'dashboard', moduleId: './viewmodels/dashboard/dashboard', nav: true, title: 'Dashboard' },
+      { route: 'settings',  name: 'settings', moduleId: './viewmodels/settings/settings', nav: true, title: 'Settings' },
       { route: 'logout', name: 'logout', moduleId: './viewmodels/logout/logout', nav: true, title: 'Logout' }
     ]);
     config.mapUnknownRoutes(instruction => {
