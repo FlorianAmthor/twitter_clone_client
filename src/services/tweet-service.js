@@ -10,6 +10,7 @@ export default class TweetService {
   users = [];
   tweets = [];
   comments = [];
+  loggedInUser = {};
 
   constructor(data, ea, ac) {
     this.ea = ea;
@@ -42,6 +43,18 @@ export default class TweetService {
     this.ac.authenticate('/api/users/authenticate', user);
   }
 
+  getLoggedInUser(){
+    this.ac.get('/api/users/getLoggedInUser').then(res => {
+      this.loggedInUser = res.content;
+    });
+  }
+
+  getUserTweets(){
+    this.ac.get('/api/tweets/users/' + this.loggedInUser._id).then(res => {
+      this.tweets = res.content;
+    });
+  }
+
   isAuthenticated() {
     return this.ac.isAuthenticated();
   }
@@ -51,8 +64,9 @@ export default class TweetService {
       success: false,
       message: ''
     };
-    this.ac.clearAuthentication();
     this.ea.publish(new LoginStatus(status));
+    this.ac.clearAuthentication();
+    this.loggedInUser = undefined;
   }
 
   register(firstName, lastName, email, password) {
@@ -71,12 +85,14 @@ export default class TweetService {
       password: password
     }
 
-    this.ac.post('api/users/update', newUser);
+    this.ac.post('/api/users/' + this.loggedInUser._id +'/update', newUser).then(res => {
+      this.loggedInUser = res.content;
+    });
   }
 
-  tweet(author, date, content) {
+  tweet(date, content) {
     let tweet = {
-      author: this.users[1],
+      author: '',
       date: date,
       content: content,
     };

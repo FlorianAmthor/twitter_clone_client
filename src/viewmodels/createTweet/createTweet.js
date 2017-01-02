@@ -4,18 +4,16 @@ import TweetService from '../../services/tweet-service';
 @inject(TweetService)
 export class Tweet {
 
-  author;
   date;
   content;
 
   constructor(ts) {
     this.tweetService = ts;
-    this.author = this.tweetService.users[1];
   }
 
   createTweet() {
     this.date = Date.now();
-    this.tweetService.tweet(this.author, this.date, this.content);
+    this.tweetService.tweet(this.date, this.content);
     this.content = null;
     this.date = null;
   }

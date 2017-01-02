@@ -9,6 +9,8 @@ export class Settings {
 
   constructor(ts) {
     this.tweetService = ts;
+    this.email = this.tweetService.loggedInUser.email;
+    this.password = this.tweetService.loggedInUser.password;
   }
 
   updateUser() {

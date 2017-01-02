@@ -1,7 +1,7 @@
 <template>
-  <div class="cards" style="height: 100%; overflow: auto; overflow-scrolling: auto ">
-    <div  class="ui card" repeat.for="tweet of tweets">
-      <div class="image" style="overflow: hidden; max-height: 200px; max-width: 300px;">
+  <div class="cards" style="height: 100%; overflow-y: auto; overflow-scrolling: auto ">
+    <div  class="ui card" repeat.for="tweet of tweets" style="margin-left: 10px">
+      <div class="image" style="overflow-y: hidden; max-height: 200px; max-width: 300px;">
         <img class="ui medium image" src="">
       </div>
       <div class="content">

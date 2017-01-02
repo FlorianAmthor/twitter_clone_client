@@ -3,15 +3,15 @@
     <div class="ui grid">
       <div class="ui ten wide column">
         <div class="ui stacked fluid form segment">
-          <form submit.trigger="createTweet()">
+          <form submit.trigger="updateUser()">
             <h3 class="ui header">Settings</h3>
             <div class="field">
               <label>Email</label>
-              <input value.bind="email" type="text" name="email">
+              <input value.bind="email" type="text" name="email" required>
             </div>
             <div class="field">
               <label>Password</label>
-              <input value.bind="password" type="password" name="password">
+              <input value.bind="password" type="password" name="password" required>
             </div>
             <!-- <div class="field">
                 <label for="file" class="ui icon button">
