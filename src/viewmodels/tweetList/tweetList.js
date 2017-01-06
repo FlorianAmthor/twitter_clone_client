@@ -5,9 +5,15 @@ import TweetService from '../../services/tweet-service';
 export class TweetList {
 
   tweets = [];
+  loggedInUser = {};
 
   constructor(ts) {
     this.tweetService = ts;
     this.tweets = this.tweetService.tweets;
+    this.loggedInUser = this.tweetService.loggedInUser;
+  }
+
+  deleteTweet(_id){
+   this.tweetService.deleteTweet(_id);
   }
 }

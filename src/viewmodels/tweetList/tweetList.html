@@ -1,13 +1,10 @@
 <template>
   <div class="cards" style="height: 100%; overflow-y: auto; overflow-scrolling: auto ">
-    <div  class="ui card" repeat.for="tweet of tweets" style="margin-left: 10px">
-      <div class="image" style="overflow-y: hidden; max-height: 200px; max-width: 300px;">
-        <img class="ui medium image" src="">
-      </div>
+    <div class="ui card" repeat.for="tweet of tweets" style="margin-left: 10px">
       <div class="content">
-        <img class="ui avatar image" src="">${tweet.author.firstName} ${tweet.author.lastName}
+        ${tweet.author.firstName} ${tweet.author.lastName}
         <div class="right floated meta">
-          <form> <!--action="/login" method="POST"-->
+          <form if.bind="tweet.author._id == loggedInUser._id" submit.delegate="deleteTweet(tweet._id)">
             <button class="ui icon button" style="background: white;">
               <i class="delete icon" style="background: white;"></i>
             </button>
@@ -15,12 +12,8 @@
         </div>
         <div class="bottom floated meta">${tweet.date}</div>
       </div>
-
       <div class="description" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;">
         ${tweet.content}
-      </div>
-      <div class="ui input">
-        <input type="text" placeholder="Add Comment...">
       </div>
     </div>
   </div>

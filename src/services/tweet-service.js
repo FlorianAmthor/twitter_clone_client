@@ -4,7 +4,7 @@ import {LoginStatus} from './messages';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import AsyncHttpClient from './async-http-client';
 
-@inject(Fixtures, EventAggregator, AsyncHttpClient)
+@inject(EventAggregator, AsyncHttpClient)
 export default class TweetService {
 
   users = [];
@@ -12,7 +12,7 @@ export default class TweetService {
   comments = [];
   loggedInUser = {};
 
-  constructor(data, ea, ac) {
+  constructor(ea, ac) {
     this.ea = ea;
     this.ac = ac;
   }
@@ -99,7 +99,13 @@ export default class TweetService {
 
     this.ac.post('/api/tweets', tweet).then(res => {
       const returnedTweet = res.content;
-      this.tweets.push(returnedTweet);
+      this.tweets.unshift(returnedTweet);
     });
+  }
+
+  deleteTweet(_id) {
+    this.ac.delete('/api/tweets/' + _id);
+    let tweetToRemove = this.tweets.find(function(tweet) { return tweet._id == _id;});
+    this.tweets.splice(this.tweets.indexOf(tweetToRemove),1);
   }
 }

@@ -44,7 +44,7 @@ export class App {
   attached() {
     if (this.tweetService.isAuthenticated()) {
       this.au.setRoot('home').then(() => {
-        this.router.navigateToRoute('home');
+        this.router.navigateToRoute('dashboard');
       });
     }
   }

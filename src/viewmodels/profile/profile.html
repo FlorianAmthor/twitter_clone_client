@@ -2,7 +2,22 @@
   <div class="ui grid" style="height: 97%;">
     <div class="one wide column"></div>
     <div class="four wide column">
-     <!-- maybe user profile -->
+      <div class="ui special cards">
+        <div class="card">
+          <div class="ui inverted dimmer">
+            <div class="content">
+              <div class="center">
+                <div class="ui primary button">Follow</div>
+              </div>
+            </div>
+          </div>
+          <div class="content">
+            <div class="header">
+              <output class="header" value.bind="loggedInUser.firstName + ' ' + loggedInUser.lastName"/>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="one wide column"></div>
     <div class="four wide column">
