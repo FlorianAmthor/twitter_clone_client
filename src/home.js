@@ -9,8 +9,9 @@ export class Home {
 
   configureRouter(config, router) {
     config.map([
-      { route: ['','dashboard'],  name: 'dashboard', moduleId: './viewmodels/dashboard/dashboard', nav: true, title: 'Dashboard' },
-      { route: 'profile',  name: 'profile', moduleId: './viewmodels/profile/profile', nav: true, title: 'Profile' },
+      { route: ['','dashboard'],  name: 'dashboard', moduleId: './viewmodels/dashboard/dashboard', nav: true, title: 'Dashboard'},
+      { route: 'profile',  name: 'profile', moduleId: './viewmodels/profile/profile', nav: true, title: 'Profile'},
+      { route: 'profile/:_id', name: 'otherProfile',  moduleId: './viewmodels/otherProfile/otherProfile', nav: false, title: ''},
       { route: 'settings',  name: 'settings', moduleId: './viewmodels/settings/settings', nav: true, title: 'Settings' },
       { route: 'logout', name: 'logout', moduleId: './viewmodels/logout/logout', nav: true, title: 'Logout' }
     ]);

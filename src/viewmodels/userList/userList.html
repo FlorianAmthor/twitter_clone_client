@@ -1,0 +1,11 @@
+<template>
+  <div class="ui celled list" style="height: 100%; overflow-y: auto; overflow-scrolling: auto ">
+    <div class="item"  repeat.for="user of users">
+      <div class="content">
+        <a class="header" if.bind="user._id != loggedInUser._id" route-href="route: otherProfile; params.bind: {_id: user._id}">
+          <div class="header">${user.firstName} ${user.lastName}</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</template>

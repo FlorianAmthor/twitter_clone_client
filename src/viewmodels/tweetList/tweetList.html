@@ -2,7 +2,6 @@
   <div class="cards" style="height: 100%; overflow-y: auto; overflow-scrolling: auto ">
     <div class="ui card" repeat.for="tweet of tweets" style="margin-left: 10px">
       <div class="content">
-        ${tweet.author.firstName} ${tweet.author.lastName}
         <div class="right floated meta">
           <form if.bind="tweet.author._id == loggedInUser._id" submit.delegate="deleteTweet(tweet._id)">
             <button class="ui icon button" style="background: white;">
@@ -10,6 +9,11 @@
             </button>
           </form>
         </div>
+        <a class="header" if.bind="tweet.author._id != loggedInUser._id" route-href="route: otherProfile; params.bind: {_id: tweet.author._id}">${tweet.author.firstName} ${tweet.author.lastName}
+        </a>
+        <a class="header" if.bind="tweet.author._id == loggedInUser._id" route-href="route: profile">${tweet.author.firstName} ${tweet.author.lastName}
+        </a>
+
         <div class="bottom floated meta">${tweet.date}</div>
       </div>
       <div class="description" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;">

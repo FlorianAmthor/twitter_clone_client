@@ -9,11 +9,9 @@ export class Profile{
 
   constructor(ts){
     this.tweetService = ts;
-    this.tweetService.getUserTweets();
-    this.loggedInUser = this.tweetService.loggedInUser;
   }
 
-  activate(){
+  activate(params, routeConfig){
     return new Promise((resolve, reject) => {
       this.tweetService.getUserTweets();
       if (this.tweetService.loggedInUser == undefined){
@@ -24,6 +22,7 @@ export class Profile{
 
     }).then(u => {
       this.loggedInUser = u;
+      routeConfig.navModel.title = this.tweetService.loggedInUser.firstName + ' ' + this.tweetService.loggedInUser.lastName;
     });
   }
 }

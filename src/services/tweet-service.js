@@ -55,6 +55,12 @@ export default class TweetService {
     });
   }
 
+  getTweetsOfUser(_id){
+    this.ac.get('/api/tweets/users/' + _id).then(res => {
+      this.tweets = res.content;
+    });
+  }
+
   isAuthenticated() {
     return this.ac.isAuthenticated();
   }

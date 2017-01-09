@@ -2,7 +2,10 @@ import {inject} from 'aurelia-framework';
 import TweetService from '../../services/tweet-service';
 
 @inject(TweetService)
-export class Dashboard {
+export class OtherProfile{
+
+  tweets = [];
+  currentUser;
 
   constructor(ts){
     this.tweetService = ts;
@@ -10,16 +13,14 @@ export class Dashboard {
 
   activate(params, routeConfig){
     return new Promise((resolve, reject) => {
-      this.tweetService.getTweets();
-      this.tweetService.getUsers();1
-      if (this.tweetService.loggedInUser == undefined){
-        this.tweetService.getLoggedInUser();
-      }
-      let u = this.tweetService.loggedInUser;
+      this.tweetService.getTweetsOfUser(params._id);
+      let u = this.tweetService.users.find(user => {
+        return user._id == params._id;
+      });
       setTimeout(function(){resolve(u);}, 200);
 
     }).then(u => {
-      this.user = u;
+      this.currentUser = u;
     });
   }
 }
