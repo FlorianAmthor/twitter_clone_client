@@ -273,7 +273,7 @@ define('services/fixtures',['exports'], function (exports) {
   var Fixtures = function Fixtures() {
     _classCallCheck(this, Fixtures);
 
-    this.baseUrl = 'https://sheltered-thicket-47173.herokuapp.com/';
+    this.baseUrl = 'https://sheltered-thicket-47173.herokuapp.com';
   };
 
   exports.default = Fixtures;
@@ -296,16 +296,20 @@ define('services/messages',["exports"], function (exports) {
 
     this.status = status;
   };
+
+  var Tweets = exports.Tweets = function Tweets(tweets) {
+    _classCallCheck(this, Tweets);
+
+    this.tweets = tweets;
+  };
 });
-define('services/tweet-service',['exports', 'aurelia-framework', './fixtures', './messages', 'aurelia-event-aggregator', './async-http-client'], function (exports, _aureliaFramework, _fixtures, _messages, _aureliaEventAggregator, _asyncHttpClient) {
+define('services/tweet-service',['exports', 'aurelia-framework', './messages', 'aurelia-event-aggregator', './async-http-client'], function (exports, _aureliaFramework, _messages, _aureliaEventAggregator, _asyncHttpClient) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
   exports.default = undefined;
-
-  var _fixtures2 = _interopRequireDefault(_fixtures);
 
   var _asyncHttpClient2 = _interopRequireDefault(_asyncHttpClient);
 
@@ -349,6 +353,7 @@ define('services/tweet-service',['exports', 'aurelia-framework', './fixtures', '
 
       this.ac.get('/api/tweets').then(function (res) {
         _this2.tweets = res.content;
+        _this2.publishTweets();
       });
     };
 
@@ -381,6 +386,7 @@ define('services/tweet-service',['exports', 'aurelia-framework', './fixtures', '
 
       this.ac.get('/api/tweets/users/' + this.loggedInUser._id).then(function (res) {
         _this5.tweets = res.content;
+        _this5.publishTweets();
       });
     };
 
@@ -389,6 +395,7 @@ define('services/tweet-service',['exports', 'aurelia-framework', './fixtures', '
 
       this.ac.get('/api/tweets/users/' + _id).then(function (res) {
         _this6.tweets = res.content;
+        _this6.publishTweets();
       });
     };
 
@@ -441,6 +448,7 @@ define('services/tweet-service',['exports', 'aurelia-framework', './fixtures', '
       this.ac.post('/api/tweets', tweet).then(function (res) {
         var returnedTweet = res.content;
         _this8.tweets.unshift(returnedTweet);
+        _this8.publishTweets();
       });
     };
 
@@ -450,6 +458,10 @@ define('services/tweet-service',['exports', 'aurelia-framework', './fixtures', '
         return tweet._id == _id;
       });
       this.tweets.splice(this.tweets.indexOf(tweetToRemove), 1);
+    };
+
+    TweetService.prototype.publishTweets = function publishTweets() {
+      this.ea.publish(new _messages.Tweets(this.tweets));
     };
 
     return TweetService;
@@ -533,14 +545,12 @@ define('viewmodels/dashboard/dashboard',['exports', 'aurelia-framework', '../../
 
       return new Promise(function (resolve, reject) {
         _this.tweetService.getTweets();
-        _this.tweetService.getUsers();1;
+        _this.tweetService.getUsers();
         if (_this.tweetService.loggedInUser == undefined) {
           _this.tweetService.getLoggedInUser();
         }
         var u = _this.tweetService.loggedInUser;
-        setTimeout(function () {
-          resolve(u);
-        }, 200);
+        resolve(u);
       }).then(function (u) {
         _this.user = u;
       });
@@ -671,9 +681,7 @@ define('viewmodels/otherProfile/otherProfile',['exports', 'aurelia-framework', '
         var u = _this.tweetService.users.find(function (user) {
           return user._id == params._id;
         });
-        setTimeout(function () {
-          resolve(u);
-        }, 200);
+        resolve(u);
       }).then(function (u) {
         _this.currentUser = u;
       });
@@ -724,9 +732,7 @@ define('viewmodels/profile/profile',['exports', 'aurelia-framework', '../../serv
           _this.tweetService.getLoggedInUser();
         }
         var u = _this.tweetService.loggedInUser;
-        setTimeout(function () {
-          resolve(u);
-        }, 200);
+        resolve(u);
       }).then(function (u) {
         _this.loggedInUser = u;
         routeConfig.navModel.title = _this.tweetService.loggedInUser.firstName + ' ' + _this.tweetService.loggedInUser.lastName;
@@ -823,7 +829,7 @@ define('viewmodels/signup/signup',['exports', 'aurelia-framework', '../../servic
     return Signup;
   }()) || _class);
 });
-define('viewmodels/tweetList/tweetList',['exports', 'aurelia-framework', '../../services/tweet-service'], function (exports, _aureliaFramework, _tweetService) {
+define('viewmodels/tweetList/tweetList',['exports', 'aurelia-framework', '../../services/tweet-service', 'aurelia-event-aggregator', '../../services/messages'], function (exports, _aureliaFramework, _tweetService, _aureliaEventAggregator, _messages) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -847,8 +853,10 @@ define('viewmodels/tweetList/tweetList',['exports', 'aurelia-framework', '../../
 
   var _dec, _class;
 
-  var TweetList = exports.TweetList = (_dec = (0, _aureliaFramework.inject)(_tweetService2.default), _dec(_class = function () {
-    function TweetList(ts) {
+  var TweetList = exports.TweetList = (_dec = (0, _aureliaFramework.inject)(_tweetService2.default, _aureliaEventAggregator.EventAggregator), _dec(_class = function () {
+    function TweetList(ts, ea) {
+      var _this = this;
+
       _classCallCheck(this, TweetList);
 
       this.tweets = [];
@@ -857,6 +865,25 @@ define('viewmodels/tweetList/tweetList',['exports', 'aurelia-framework', '../../
       this.tweetService = ts;
       this.tweets = this.tweetService.tweets;
       this.loggedInUser = this.tweetService.loggedInUser;
+      ea.subscribeOnce(_messages.Tweets, function (msg) {
+        _this.tweets.splice(0, _this.tweets.length);
+        for (var _iterator = msg.tweets, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
+          var _ref;
+
+          if (_isArray) {
+            if (_i >= _iterator.length) break;
+            _ref = _iterator[_i++];
+          } else {
+            _i = _iterator.next();
+            if (_i.done) break;
+            _ref = _i.value;
+          }
+
+          var tweet = _ref;
+
+          _this.tweets.push(tweet);
+        }
+      });
     }
 
     TweetList.prototype.deleteTweet = function deleteTweet(_id) {
@@ -904,10 +931,10 @@ define('viewmodels/userList/userList',['exports', 'aurelia-framework', '../../se
 define('text!app.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"nav-bar.html\"></require>\n  <nav-bar router.bind=\"router\"></nav-bar>\n  <router-view></router-view>\n</template>\n"; });
 define('text!home.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"nav-bar.html\"></require>\n  <nav-bar router.bind=\"router\"></nav-bar>\n  <router-view></router-view>\n</template>\n"; });
 define('text!nav-bar.html', ['module'], function(module) { module.exports = "<template bindable=\"router\">\n  <nav class=\"ui blue inverted menu\" style=\"height: 3%;\">\n    <header class=\"header item\">Twitter-Clone</header>\n    <div class=\"right item\">\n      <div repeat.for=\"row of router.navigation\">\n        <a class=\"${row.isActive ? 'active' : ''} item\"  href.bind=\"row.href\">${row.title}</a>\n      </div>\n    </div>\n  </nav>\n</template>\n"; });
-define('text!viewmodels/dashboard/dashboard.html', ['module'], function(module) { module.exports = "<template>\n  <div class=\"ui grid\" style=\"height: 97%;\">\n    <div class=\"one wide column\"></div>\n    <div class=\"four wide column\">\n      <compose view-model=\"../createTweet/createTweet\"></compose>\n    </div>\n    <div class=\"one wide column\"></div>\n    <div class=\"four wide column\">\n      <compose class=\"four wide column\" view-model=\"../tweetList/tweetList\"></compose>\n    </div>\n    <div class=\"one wide column\"></div>\n    <div class=\"four wide column\">\n      <compose class=\"four wide column\" view-model=\"../userList/userList\"></compose>\n    </div>\n    <div class=\"one wide column\"></div>\n  </div>\n</template>\n"; });
 define('text!viewmodels/createTweet/createTweet.html', ['module'], function(module) { module.exports = "<template>\n  <form submit.trigger=\"createTweet()\">\n    <div class=\"grouped inline fields\">\n      <h3> Tell us something!</h3>\n      <div class=\"ui form\">\n        <div class=\"field\">\n          <textarea name=\"content\" placeholder=\"Content...\" maxlength=\"140\" value.bind=\"content\"\n                    style=\"resize: none\"></textarea>\n        </div>\n      </div>\n    </div>\n    <button class=\"ui blue submit button\">Tweet</button>\n  </form>\n</template>\n"; });
-define('text!viewmodels/logout/logout.html', ['module'], function(module) { module.exports = "<template>\n  <form submit.delegate=\"logout()\" class=\"ui stacked segment form\">\n    <h3 class=\"ui header\">Are you sure you want to log out?</h3>\n    <button class=\"ui blue submit button\">Logout</button>\n  </form>\n</template>\n"; });
+define('text!viewmodels/dashboard/dashboard.html', ['module'], function(module) { module.exports = "<template>\n  <div class=\"ui grid\" style=\"height: 97%;\">\n    <div class=\"one wide column\"></div>\n    <div class=\"four wide column\">\n      <compose view-model=\"../createTweet/createTweet\"></compose>\n    </div>\n    <div class=\"one wide column\"></div>\n    <div class=\"four wide column\">\n      <compose class=\"four wide column\" view-model=\"../tweetList/tweetList\"></compose>\n    </div>\n    <div class=\"one wide column\"></div>\n    <div class=\"four wide column\">\n      <compose class=\"four wide column\" view-model=\"../userList/userList\"></compose>\n    </div>\n    <div class=\"one wide column\"></div>\n  </div>\n</template>\n"; });
 define('text!viewmodels/login/login.html', ['module'], function(module) { module.exports = "<template>\n\n  <form submit.delegate=\"login($event)\" class=\"ui stacked segment form\">\n    <h3 class=\"ui header\">Log-in</h3>\n    <div class=\"field\">\n      <label>Email</label> <input placeholder=\"Email\" value.bind=\"email\"/>\n    </div>\n    <div class=\"field\">\n      <label>Password</label> <input placeholder=\"Password\" type=\"password\" value.bind=\"password\"/>\n    </div>\n    <button class=\"ui blue submit button\">Login</button>\n  </form>\n\n</template>\n"; });
+define('text!viewmodels/logout/logout.html', ['module'], function(module) { module.exports = "<template>\n  <form submit.delegate=\"logout()\" class=\"ui stacked segment form\">\n    <h3 class=\"ui header\">Are you sure you want to log out?</h3>\n    <button class=\"ui blue submit button\">Logout</button>\n  </form>\n</template>\n"; });
 define('text!viewmodels/otherProfile/otherProfile.html', ['module'], function(module) { module.exports = "<template>\n  <div class=\"ui grid\" style=\"height: 97%;\">\n    <div class=\"one wide column\"></div>\n    <div class=\"four wide column\">\n      <div class=\"ui special cards\">\n        <div class=\"card\">\n          <div class=\"ui inverted dimmer\">\n            <div class=\"content\">\n              <div class=\"center\">\n                <div class=\"ui primary button\">Follow</div>\n              </div>\n            </div>\n          </div>\n          <div class=\"content\">\n            <div class=\"header\">\n              <output class=\"header\" value.bind=\"currentUser.firstName + ' ' + currentUser.lastName\"/>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n    <div class=\"one wide column\"></div>\n    <div class=\"four wide column\">\n      <compose class=\"four wide column\" view-model=\"../tweetList/tweetList\"></compose>\n    </div>\n    <div class=\"one wide column\"></div>\n    <div class=\"four wide column\">\n      <compose class=\"four wide column\" view-model=\"../userList/userList\"></compose>\n    </div>\n    <div class=\"one wide column\"></div>\n  </div>\n</template>\n"; });
 define('text!viewmodels/profile/profile.html', ['module'], function(module) { module.exports = "<template>\n  <div class=\"ui grid\" style=\"height: 97%;\">\n    <div class=\"one wide column\"></div>\n    <div class=\"four wide column\">\n      <div class=\"ui special cards\">\n        <div class=\"card\">\n          <div class=\"ui inverted dimmer\">\n            <div class=\"content\">\n              <div class=\"center\">\n                <div class=\"ui primary button\">Follow</div>\n              </div>\n            </div>\n          </div>\n          <div class=\"content\">\n            <div class=\"header\">\n              <output class=\"header\" value.bind=\"loggedInUser.firstName + ' ' + loggedInUser.lastName\"/>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n    <div class=\"one wide column\"></div>\n    <div class=\"four wide column\">\n      <compose class=\"four wide column\" view-model=\"../tweetList/tweetList\"></compose>\n    </div>\n    <div class=\"one wide column\"></div>\n    <div class=\"four wide column\">\n      <compose class=\"four wide column\" view-model=\"../userList/userList\"></compose>\n    </div>\n    <div class=\"one wide column\"></div>\n  </div>\n</template>\n"; });
 define('text!viewmodels/settings/settings.html', ['module'], function(module) { module.exports = "<template>\n  <section class=\"ui raised segment\">\n    <div class=\"ui grid\">\n      <div class=\"ui ten wide column\">\n        <div class=\"ui stacked fluid form segment\">\n          <form submit.trigger=\"updateUser()\">\n            <h3 class=\"ui header\">Settings</h3>\n            <div class=\"field\">\n              <label>Email</label>\n              <input value.bind=\"email\" type=\"text\" name=\"email\" required>\n            </div>\n            <div class=\"field\">\n              <label>Password</label>\n              <input value.bind=\"password\" type=\"password\" name=\"password\" required>\n            </div>\n            <button class=\"ui blue submit button\">Save</button>\n          </form>\n        </div>\n      </div>\n    </div>\n  </section>\n</template>\n"; });

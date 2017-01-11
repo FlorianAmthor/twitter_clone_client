@@ -18,7 +18,7 @@ export class Profile{
         this.tweetService.getLoggedInUser();
       }
       let u = this.tweetService.loggedInUser;
-      setTimeout(function(){resolve(u);}, 200);
+      resolve(u);
 
     }).then(u => {
       this.loggedInUser = u;

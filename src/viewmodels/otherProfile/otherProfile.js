@@ -17,7 +17,7 @@ export class OtherProfile{
       let u = this.tweetService.users.find(user => {
         return user._id == params._id;
       });
-      setTimeout(function(){resolve(u);}, 200);
+      resolve(u);
 
     }).then(u => {
       this.currentUser = u;

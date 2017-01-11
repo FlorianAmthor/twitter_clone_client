@@ -1,6 +1,5 @@
 import {inject} from 'aurelia-framework';
-import Fixtures from './fixtures';
-import {LoginStatus} from './messages';
+import {Tweets, LoginStatus} from './messages';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import AsyncHttpClient from './async-http-client';
 
@@ -26,6 +25,7 @@ export default class TweetService {
   getTweets() {
     this.ac.get('/api/tweets').then(res => {
       this.tweets = res.content;
+      this.publishTweets();
     });
   }
 
@@ -52,12 +52,14 @@ export default class TweetService {
   getUserTweets(){
     this.ac.get('/api/tweets/users/' + this.loggedInUser._id).then(res => {
       this.tweets = res.content;
+      this.publishTweets();
     });
   }
 
   getTweetsOfUser(_id){
     this.ac.get('/api/tweets/users/' + _id).then(res => {
       this.tweets = res.content;
+      this.publishTweets();
     });
   }
 
@@ -106,6 +108,7 @@ export default class TweetService {
     this.ac.post('/api/tweets', tweet).then(res => {
       const returnedTweet = res.content;
       this.tweets.unshift(returnedTweet);
+      this.publishTweets();
     });
   }
 
@@ -113,5 +116,9 @@ export default class TweetService {
     this.ac.delete('/api/tweets/' + _id);
     let tweetToRemove = this.tweets.find(function(tweet) { return tweet._id == _id;});
     this.tweets.splice(this.tweets.indexOf(tweetToRemove),1);
+  }
+
+  publishTweets(){
+    this.ea.publish(new Tweets(this.tweets));
   }
 }
