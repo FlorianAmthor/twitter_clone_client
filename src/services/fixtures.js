@@ -1,3 +1,3 @@
 export default class Fixtures {
-  baseUrl = 'http://localhost:4000';
+  baseUrl = 'https://sheltered-thicket-47173.herokuapp.com/';
 }
