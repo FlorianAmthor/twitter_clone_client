@@ -742,49 +742,6 @@ define('viewmodels/profile/profile',['exports', 'aurelia-framework', '../../serv
     return Profile;
   }()) || _class);
 });
-define('viewmodels/settings/settings',['exports', 'aurelia-framework', '../../services/tweet-service'], function (exports, _aureliaFramework, _tweetService) {
-  'use strict';
-
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.Settings = undefined;
-
-  var _tweetService2 = _interopRequireDefault(_tweetService);
-
-  function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-      default: obj
-    };
-  }
-
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  var _dec, _class;
-
-  var Settings = exports.Settings = (_dec = (0, _aureliaFramework.inject)(_tweetService2.default), _dec(_class = function () {
-    function Settings(ts) {
-      _classCallCheck(this, Settings);
-
-      this.email = '';
-      this.password = '';
-
-      this.tweetService = ts;
-      this.email = this.tweetService.loggedInUser.email;
-      this.password = this.tweetService.loggedInUser.password;
-    }
-
-    Settings.prototype.updateUser = function updateUser() {
-      this.tweetService.updateUser(this.email, this.password);
-    };
-
-    return Settings;
-  }()) || _class);
-});
 define('viewmodels/signup/signup',['exports', 'aurelia-framework', '../../services/tweet-service'], function (exports, _aureliaFramework, _tweetService) {
   'use strict';
 
@@ -827,6 +784,49 @@ define('viewmodels/signup/signup',['exports', 'aurelia-framework', '../../servic
     };
 
     return Signup;
+  }()) || _class);
+});
+define('viewmodels/settings/settings',['exports', 'aurelia-framework', '../../services/tweet-service'], function (exports, _aureliaFramework, _tweetService) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.Settings = undefined;
+
+  var _tweetService2 = _interopRequireDefault(_tweetService);
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  var _dec, _class;
+
+  var Settings = exports.Settings = (_dec = (0, _aureliaFramework.inject)(_tweetService2.default), _dec(_class = function () {
+    function Settings(ts) {
+      _classCallCheck(this, Settings);
+
+      this.email = '';
+      this.password = '';
+
+      this.tweetService = ts;
+      this.email = this.tweetService.loggedInUser.email;
+      this.password = this.tweetService.loggedInUser.password;
+    }
+
+    Settings.prototype.updateUser = function updateUser() {
+      this.tweetService.updateUser(this.email, this.password);
+    };
+
+    return Settings;
   }()) || _class);
 });
 define('viewmodels/tweetList/tweetList',['exports', 'aurelia-framework', '../../services/tweet-service', 'aurelia-event-aggregator', '../../services/messages'], function (exports, _aureliaFramework, _tweetService, _aureliaEventAggregator, _messages) {
@@ -936,9 +936,9 @@ define('text!viewmodels/dashboard/dashboard.html', ['module'], function(module) 
 define('text!viewmodels/login/login.html', ['module'], function(module) { module.exports = "<template>\n\n  <form submit.delegate=\"login($event)\" class=\"ui stacked segment form\">\n    <h3 class=\"ui header\">Log-in</h3>\n    <div class=\"field\">\n      <label>Email</label> <input placeholder=\"Email\" value.bind=\"email\"/>\n    </div>\n    <div class=\"field\">\n      <label>Password</label> <input placeholder=\"Password\" type=\"password\" value.bind=\"password\"/>\n    </div>\n    <button class=\"ui blue submit button\">Login</button>\n  </form>\n\n</template>\n"; });
 define('text!viewmodels/logout/logout.html', ['module'], function(module) { module.exports = "<template>\n  <form submit.delegate=\"logout()\" class=\"ui stacked segment form\">\n    <h3 class=\"ui header\">Are you sure you want to log out?</h3>\n    <button class=\"ui blue submit button\">Logout</button>\n  </form>\n</template>\n"; });
 define('text!viewmodels/otherProfile/otherProfile.html', ['module'], function(module) { module.exports = "<template>\n  <div class=\"ui grid\" style=\"height: 97%;\">\n    <div class=\"one wide column\"></div>\n    <div class=\"four wide column\">\n      <div class=\"ui special cards\">\n        <div class=\"card\">\n          <div class=\"ui inverted dimmer\">\n            <div class=\"content\">\n              <div class=\"center\">\n                <div class=\"ui primary button\">Follow</div>\n              </div>\n            </div>\n          </div>\n          <div class=\"content\">\n            <div class=\"header\">\n              <output class=\"header\" value.bind=\"currentUser.firstName + ' ' + currentUser.lastName\"/>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n    <div class=\"one wide column\"></div>\n    <div class=\"four wide column\">\n      <compose class=\"four wide column\" view-model=\"../tweetList/tweetList\"></compose>\n    </div>\n    <div class=\"one wide column\"></div>\n    <div class=\"four wide column\">\n      <compose class=\"four wide column\" view-model=\"../userList/userList\"></compose>\n    </div>\n    <div class=\"one wide column\"></div>\n  </div>\n</template>\n"; });
-define('text!viewmodels/profile/profile.html', ['module'], function(module) { module.exports = "<template>\n  <div class=\"ui grid\" style=\"height: 97%;\">\n    <div class=\"one wide column\"></div>\n    <div class=\"four wide column\">\n      <div class=\"ui special cards\">\n        <div class=\"card\">\n          <div class=\"ui inverted dimmer\">\n            <div class=\"content\">\n              <div class=\"center\">\n                <div class=\"ui primary button\">Follow</div>\n              </div>\n            </div>\n          </div>\n          <div class=\"content\">\n            <div class=\"header\">\n              <output class=\"header\" value.bind=\"loggedInUser.firstName + ' ' + loggedInUser.lastName\"/>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n    <div class=\"one wide column\"></div>\n    <div class=\"four wide column\">\n      <compose class=\"four wide column\" view-model=\"../tweetList/tweetList\"></compose>\n    </div>\n    <div class=\"one wide column\"></div>\n    <div class=\"four wide column\">\n      <compose class=\"four wide column\" view-model=\"../userList/userList\"></compose>\n    </div>\n    <div class=\"one wide column\"></div>\n  </div>\n</template>\n"; });
 define('text!viewmodels/settings/settings.html', ['module'], function(module) { module.exports = "<template>\n  <section class=\"ui raised segment\">\n    <div class=\"ui grid\">\n      <div class=\"ui ten wide column\">\n        <div class=\"ui stacked fluid form segment\">\n          <form submit.trigger=\"updateUser()\">\n            <h3 class=\"ui header\">Settings</h3>\n            <div class=\"field\">\n              <label>Email</label>\n              <input value.bind=\"email\" type=\"text\" name=\"email\" required>\n            </div>\n            <div class=\"field\">\n              <label>Password</label>\n              <input value.bind=\"password\" type=\"password\" name=\"password\" required>\n            </div>\n            <button class=\"ui blue submit button\">Save</button>\n          </form>\n        </div>\n      </div>\n    </div>\n  </section>\n</template>\n"; });
+define('text!viewmodels/profile/profile.html', ['module'], function(module) { module.exports = "<template>\n  <div class=\"ui grid\" style=\"height: 97%;\">\n    <div class=\"one wide column\"></div>\n    <div class=\"four wide column\">\n      <div class=\"ui special cards\">\n        <div class=\"card\">\n          <div class=\"ui inverted dimmer\">\n            <div class=\"content\">\n              <div class=\"center\">\n                <div class=\"ui primary button\">Follow</div>\n              </div>\n            </div>\n          </div>\n          <div class=\"content\">\n            <div class=\"header\">\n              <output class=\"header\" value.bind=\"loggedInUser.firstName + ' ' + loggedInUser.lastName\"/>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n    <div class=\"one wide column\"></div>\n    <div class=\"four wide column\">\n      <compose class=\"four wide column\" view-model=\"../tweetList/tweetList\"></compose>\n    </div>\n    <div class=\"one wide column\"></div>\n    <div class=\"four wide column\">\n      <compose class=\"four wide column\" view-model=\"../userList/userList\"></compose>\n    </div>\n    <div class=\"one wide column\"></div>\n  </div>\n</template>\n"; });
 define('text!viewmodels/signup/signup.html', ['module'], function(module) { module.exports = "<template>\n  <div class=\"ui grid\" style=\"height: 95%\">\n    <div class=\"ui three wide column\"></div>\n    <div class=\"ui ten wide column\">\n      <h2>\n        Welcome to Twitter-Clone!\n        <br/>\n        Sign up or log in to tweet.\n      </h2>\n      <div class=\"ui stacked fluid form segment\">\n        <form submit.delegate=\"register($event)\">\n          <h3 class=\"ui header\">Register</h3>\n          <div class=\"two fields\">\n            <div class=\"field\">\n              <label>First Name</label>\n              <input placeholder=\"First Name\" type=\"text\" name=\"firstName\" value.bind=\"firstName\">\n            </div>\n            <div class=\"field\">\n              <label>Last Name</label>\n              <input placeholder=\"Last Name\" type=\"text\" name=\"lastName\" value.bind=\"lastName\">\n            </div>\n          </div>\n          <div class=\"field\">\n            <label>Email</label>\n            <input placeholder=\"Email\" type=\"text\" name=\"email\" value.bind=\"email\">\n          </div>\n          <div class=\"field\">\n            <label>Password</label>\n            <input placeholder=\"Password\" type=\"password\" name=\"password\" value.bind=\"password\">\n          </div>\n          <button class=\"ui blue submit button\">Submit</button>\n        </form>\n        </form>\n      </div>\n    </div>\n    <div class=\"ui three wide column\"/>\n  </div>\n</template>\n"; });
-define('text!viewmodels/tweetList/tweetList.html', ['module'], function(module) { module.exports = "<template>\n  <div class=\"cards\" style=\"height: 100%; overflow-y: auto; overflow-scrolling: auto \">\n    <div class=\"ui card\" repeat.for=\"tweet of tweets\" style=\"margin-left: 10px\">\n      <div class=\"content\">\n        <div class=\"right floated meta\">\n          <form if.bind=\"tweet.author._id == loggedInUser._id\" submit.delegate=\"deleteTweet(tweet._id)\">\n            <button class=\"ui icon button\" style=\"background: white;\">\n              <i class=\"delete icon\" style=\"background: white;\"></i>\n            </button>\n          </form>\n        </div>\n        <a class=\"header\" if.bind=\"tweet.author._id != loggedInUser._id\" route-href=\"route: otherProfile; params.bind: {_id: tweet.author._id}\">${tweet.author.firstName} ${tweet.author.lastName}\n        </a>\n        <a class=\"header\" if.bind=\"tweet.author._id == loggedInUser._id\" route-href=\"route: profile\">${tweet.author.firstName} ${tweet.author.lastName}\n        </a>\n\n        <div class=\"bottom floated meta\">${tweet.date}</div>\n      </div>\n      <div class=\"description\" style=\"padding-left: 10px; padding-right: 10px; padding-bottom: 10px;\">\n        ${tweet.content}\n      </div>\n    </div>\n  </div>\n</template>\n"; });
 define('text!viewmodels/userList/userList.html', ['module'], function(module) { module.exports = "<template>\n  <div class=\"ui celled list\" style=\"height: 100%; overflow-y: auto; overflow-scrolling: auto \">\n    <div class=\"item\"  repeat.for=\"user of users\">\n      <div class=\"content\">\n        <a class=\"header\" if.bind=\"user._id != loggedInUser._id\" route-href=\"route: otherProfile; params.bind: {_id: user._id}\">\n          <div class=\"header\">${user.firstName} ${user.lastName}</div>\n        </a>\n      </div>\n    </div>\n  </div>\n</template>\n"; });
+define('text!viewmodels/tweetList/tweetList.html', ['module'], function(module) { module.exports = "<template>\n  <div class=\"cards\" style=\"height: 100%; overflow-y: auto; overflow-scrolling: auto \">\n    <div class=\"ui card\" repeat.for=\"tweet of tweets\" style=\"margin-left: 10px\">\n      <div class=\"content\">\n        <div class=\"right floated meta\">\n          <form if.bind=\"tweet.author._id == loggedInUser._id\" submit.delegate=\"deleteTweet(tweet._id)\">\n            <button class=\"ui icon button\" style=\"background: white;\">\n              <i class=\"delete icon\" style=\"background: white;\"></i>\n            </button>\n          </form>\n        </div>\n        <a class=\"header\" if.bind=\"tweet.author._id != loggedInUser._id\" route-href=\"route: otherProfile; params.bind: {_id: tweet.author._id}\">${tweet.author.firstName} ${tweet.author.lastName}\n        </a>\n        <a class=\"header\" if.bind=\"tweet.author._id == loggedInUser._id\" route-href=\"route: profile\">${tweet.author.firstName} ${tweet.author.lastName}\n        </a>\n\n        <div class=\"bottom floated meta\">${tweet.date}</div>\n      </div>\n      <div class=\"description\" style=\"padding-left: 10px; padding-right: 10px; padding-bottom: 10px;\">\n        ${tweet.content}\n      </div>\n    </div>\n  </div>\n</template>\n"; });
 //# sourceMappingURL=app-bundle.js.map
